@@ -51,6 +51,10 @@ namespace InsuranceApi
                 options.UseSqlServer(Configuration.GetConnectionString("dev")));
 
             services.AddScoped<IClienteRepository, ClienteRepository>();
+            services.AddScoped<IPolizaRepository, PolizaRepository>();
+            services.AddScoped<IPolizaClienteRepository, PolizaClienteRepository>();
+            services.AddScoped<ITipoRiesgoRepository, TipoRiesgoRepository>();
+            services.AddScoped<ITipoCubrimientoRepository, TipoCubrimientoRepository>();
 
         }
 

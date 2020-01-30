@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InsuranceApi.Models;
+using InsuranceApi.Repositories;
 
 namespace InsuranceApi.Controllers
 {
@@ -13,80 +14,44 @@ namespace InsuranceApi.Controllers
     [ApiController]
     public class PolizasController : ControllerBase
     {
-        private readonly masterContext _context;
+        private readonly IPolizaRepository _repository;
 
-        public PolizasController(masterContext context)
+        public PolizasController(IPolizaRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        // GET: api/Polizas
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Poliza>>> GetPolizas()
+        public async Task<ActionResult<IEnumerable<Poliza>>> Get()
         {
-            return await _context.Polizas.ToListAsync();
+            return await _repository.FindAll().ToListAsync();
         }
 
-        // GET: api/Polizas/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Poliza>> GetPolizas(int id)
+        public async Task<ActionResult<Poliza>> GetById(int id)
         {
-            var polizas = await _context.Polizas.FindAsync(id);
+            var poliza = _repository.Find(id);
 
-            if (polizas == null)
+            if (poliza == null)
             {
                 return NotFound();
             }
 
-            return polizas;
+            return poliza;
         }
 
-        // PUT: api/Polizas/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPolizas(int id, Poliza polizas)
-        {
-            if (id != polizas.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(polizas).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PolizasExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/Polizas
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Poliza>> PostPolizas(Poliza polizas)
+        public async Task<ActionResult<Poliza>> post(Poliza poliza)
         {
-            _context.Polizas.Add(polizas);
             try
             {
-                await _context.SaveChangesAsync();
+                _repository.Create(poliza);
             }
             catch (DbUpdateException)
             {
-                if (PolizasExists(polizas.Id))
+                if (dataExists(poliza.Id))
                 {
                     return Conflict();
                 }
@@ -96,28 +61,26 @@ namespace InsuranceApi.Controllers
                 }
             }
 
-            return CreatedAtAction("GetPolizas", new { id = polizas.Id }, polizas);
+            return CreatedAtAction("Get", new { id = poliza.Id }, poliza);
         }
 
-        // DELETE: api/Polizas/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Poliza>> DeletePolizas(int id)
+        public async Task<ActionResult<Poliza>> Delete(int id)
         {
-            var polizas = await _context.Polizas.FindAsync(id);
-            if (polizas == null)
+            var poliza = _repository.Find(id);
+            if (poliza == null)
             {
                 return NotFound();
             }
 
-            _context.Polizas.Remove(polizas);
-            await _context.SaveChangesAsync();
+            _repository.Delete(poliza);
 
-            return polizas;
+            return poliza;
         }
 
-        private bool PolizasExists(int id)
+        private bool dataExists(int id)
         {
-            return _context.Polizas.Any(e => e.Id == id);
+            return _repository.Find(id) != null;
         }
     }
 }

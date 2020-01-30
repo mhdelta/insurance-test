@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InsuranceApi.Models;
+using InsuranceApi.Repositories;
 
 namespace InsuranceApi.Controllers
 {
@@ -13,80 +14,44 @@ namespace InsuranceApi.Controllers
     [ApiController]
     public class TiposRiesgosController : ControllerBase
     {
-        private readonly masterContext _context;
+        private readonly ITipoRiesgoRepository _repository;
 
-        public TiposRiesgosController(masterContext context)
+        public TiposRiesgosController(ITipoRiesgoRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        // GET: api/TiposRiesgos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipoRiesgo>>> GetTiposRiesgo()
+        public async Task<ActionResult<IEnumerable<TipoRiesgo>>> Get()
         {
-            return await _context.TiposRiesgo.ToListAsync();
+            return await _repository.FindAll().ToListAsync();
         }
 
-        // GET: api/TiposRiesgos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TipoRiesgo>> GetTiposRiesgo(int id)
+        public async Task<ActionResult<TipoRiesgo>> GetById(int id)
         {
-            var tiposRiesgo = await _context.TiposRiesgo.FindAsync(id);
+            var tipoRiesgo = _repository.Find(id);
 
-            if (tiposRiesgo == null)
+            if (tipoRiesgo == null)
             {
                 return NotFound();
             }
 
-            return tiposRiesgo;
+            return tipoRiesgo;
         }
 
-        // PUT: api/TiposRiesgos/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTiposRiesgo(int id, TipoRiesgo tiposRiesgo)
-        {
-            if (id != tiposRiesgo.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(tiposRiesgo).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TiposRiesgoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/TiposRiesgos
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TipoRiesgo>> PostTiposRiesgo(TipoRiesgo tiposRiesgo)
+        public async Task<ActionResult<TipoRiesgo>> post(TipoRiesgo tipoRiesgo)
         {
-            _context.TiposRiesgo.Add(tiposRiesgo);
             try
             {
-                await _context.SaveChangesAsync();
+                _repository.Create(tipoRiesgo);
             }
             catch (DbUpdateException)
             {
-                if (TiposRiesgoExists(tiposRiesgo.Id))
+                if (dataExists(tipoRiesgo.Id))
                 {
                     return Conflict();
                 }
@@ -96,28 +61,26 @@ namespace InsuranceApi.Controllers
                 }
             }
 
-            return CreatedAtAction("GetTiposRiesgo", new { id = tiposRiesgo.Id }, tiposRiesgo);
+            return CreatedAtAction("Get", new { id = tipoRiesgo.Id }, tipoRiesgo);
         }
 
-        // DELETE: api/TiposRiesgos/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TipoRiesgo>> DeleteTiposRiesgo(int id)
+        public async Task<ActionResult<TipoRiesgo>> Delete(int id)
         {
-            var tiposRiesgo = await _context.TiposRiesgo.FindAsync(id);
-            if (tiposRiesgo == null)
+            var tipoRiesgo = _repository.Find(id);
+            if (tipoRiesgo == null)
             {
                 return NotFound();
             }
 
-            _context.TiposRiesgo.Remove(tiposRiesgo);
-            await _context.SaveChangesAsync();
+            _repository.Delete(tipoRiesgo);
 
-            return tiposRiesgo;
+            return tipoRiesgo;
         }
 
-        private bool TiposRiesgoExists(int id)
+        private bool dataExists(int id)
         {
-            return _context.TiposRiesgo.Any(e => e.Id == id);
+            return _repository.Find(id) != null;
         }
     }
 }

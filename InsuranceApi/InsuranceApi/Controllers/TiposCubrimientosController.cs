@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InsuranceApi.Models;
+using InsuranceApi.Repositories;
 
 namespace InsuranceApi.Controllers
 {
@@ -13,80 +14,44 @@ namespace InsuranceApi.Controllers
     [ApiController]
     public class TiposCubrimientosController : ControllerBase
     {
-        private readonly masterContext _context;
+        private readonly ITipoCubrimientoRepository _repository;
 
-        public TiposCubrimientosController(masterContext context)
+        public TiposCubrimientosController(ITipoCubrimientoRepository repository)
         {
-            _context = context;
+            _repository = repository;
         }
 
-        // GET: api/TiposCubrimientos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TipoCubrimiento>>> GetTiposCubrimiento()
+        public async Task<ActionResult<IEnumerable<TipoCubrimiento>>> Get()
         {
-            return await _context.TiposCubrimiento.ToListAsync();
+            return await _repository.FindAll().ToListAsync();
         }
 
-        // GET: api/TiposCubrimientos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TipoCubrimiento>> GetTiposCubrimiento(int id)
+        public async Task<ActionResult<TipoCubrimiento>> GetById(int id)
         {
-            var tiposCubrimiento = await _context.TiposCubrimiento.FindAsync(id);
+            var tipoCubrimiento = _repository.Find(id);
 
-            if (tiposCubrimiento == null)
+            if (tipoCubrimiento == null)
             {
                 return NotFound();
             }
 
-            return tiposCubrimiento;
+            return tipoCubrimiento;
         }
 
-        // PUT: api/TiposCubrimientos/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutTiposCubrimiento(int id, TipoCubrimiento tiposCubrimiento)
-        {
-            if (id != tiposCubrimiento.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(tiposCubrimiento).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TiposCubrimientoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        // POST: api/TiposCubrimientos
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<TipoCubrimiento>> PostTiposCubrimiento(TipoCubrimiento tiposCubrimiento)
+        public async Task<ActionResult<TipoCubrimiento>> post(TipoCubrimiento tipoCubrimiento)
         {
-            _context.TiposCubrimiento.Add(tiposCubrimiento);
             try
             {
-                await _context.SaveChangesAsync();
+                _repository.Create(tipoCubrimiento);
             }
             catch (DbUpdateException)
             {
-                if (TiposCubrimientoExists(tiposCubrimiento.Id))
+                if (dataExists(tipoCubrimiento.Id))
                 {
                     return Conflict();
                 }
@@ -96,28 +61,26 @@ namespace InsuranceApi.Controllers
                 }
             }
 
-            return CreatedAtAction("GetTiposCubrimiento", new { id = tiposCubrimiento.Id }, tiposCubrimiento);
+            return CreatedAtAction("Get", new { id = tipoCubrimiento.Id }, tipoCubrimiento);
         }
 
-        // DELETE: api/TiposCubrimientos/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<TipoCubrimiento>> DeleteTiposCubrimiento(int id)
+        public async Task<ActionResult<TipoCubrimiento>> Delete(int id)
         {
-            var tiposCubrimiento = await _context.TiposCubrimiento.FindAsync(id);
-            if (tiposCubrimiento == null)
+            var tipoCubrimiento = _repository.Find(id);
+            if (tipoCubrimiento == null)
             {
                 return NotFound();
             }
 
-            _context.TiposCubrimiento.Remove(tiposCubrimiento);
-            await _context.SaveChangesAsync();
+            _repository.Delete(tipoCubrimiento);
 
-            return tiposCubrimiento;
+            return tipoCubrimiento;
         }
 
-        private bool TiposCubrimientoExists(int id)
+        private bool dataExists(int id)
         {
-            return _context.TiposCubrimiento.Any(e => e.Id == id);
+            return _repository.Find(id) != null;
         }
     }
 }
