@@ -15,143 +15,128 @@ namespace InsuranceApi.Models
         {
         }
 
-        public virtual DbSet<Clientes> Clientes { get; set; }
-        public virtual DbSet<Polizas> Polizas { get; set; }
-        public virtual DbSet<PolizasCliente> PolizasCliente { get; set; }
-        public virtual DbSet<TiposCubrimiento> TiposCubrimiento { get; set; }
-        public virtual DbSet<TiposRiesgo> TiposRiesgo { get; set; }
+        public virtual DbSet<Cliente> Clientes { get; set; }
+        public virtual DbSet<Poliza> Polizas { get; set; }
+        public virtual DbSet<PolizaCliente> PolizasCliente { get; set; }
+        public virtual DbSet<TipoCubrimiento> TiposCubrimiento { get; set; }
+        public virtual DbSet<TipoRiesgo> TiposRiesgo { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-                optionsBuilder.UseSqlServer("Server=localhost;Database=master;Trusted_Connection=True;");
-            }
-        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Clientes>(entity =>
+            modelBuilder.Entity<Cliente>(entity =>
             {
-                entity.HasKey(e => e.ClieId)
+                entity.HasKey(e => e.Id)
                     .HasName("Clientes_PK");
 
                 entity.ToTable("CLIENTES");
 
-                entity.Property(e => e.ClieId)
-                    .HasColumnName("CLIE_ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("CLIE_ID");
 
-                entity.Property(e => e.ClieNombre)
+                entity.Property(e => e.Nombre)
                     .HasColumnName("CLIE_NOMBRE")
                     .HasMaxLength(100)
                     .IsUnicode(false);
             });
 
-            modelBuilder.Entity<Polizas>(entity =>
+            modelBuilder.Entity<Poliza>(entity =>
             {
-                entity.HasKey(e => e.PoliId)
+                entity.HasKey(e => e.Id)
                     .HasName("Polizas_PK");
 
                 entity.ToTable("POLIZAS");
 
-                entity.Property(e => e.PoliId)
-                    .HasColumnName("POLI_ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("POLI_ID");
 
-                entity.Property(e => e.PoliDescripcion)
+                entity.Property(e => e.Descripcion)
                     .HasColumnName("POLI_DESCRIPCION")
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PoliInicioVigencia)
+                entity.Property(e => e.InicioVigencia)
                     .HasColumnName("POLI_INICIO_VIGENCIA")
                     .HasColumnType("date");
 
-                entity.Property(e => e.PoliMesesCobertura).HasColumnName("POLI_MESES_COBERTURA");
+                entity.Property(e => e.MesesCobertura).HasColumnName("POLI_MESES_COBERTURA");
 
-                entity.Property(e => e.PoliNombre)
+                entity.Property(e => e.Nombre)
                     .HasColumnName("POLI_NOMBRE")
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PoliPrecio).HasColumnName("POLI_PRECIO");
+                entity.Property(e => e.Precio).HasColumnName("POLI_PRECIO");
 
-                entity.Property(e => e.PoliTipoCubrimiento).HasColumnName("POLI_TIPO_CUBRIMIENTO");
+                entity.Property(e => e.TipoCubrimiento).HasColumnName("POLI_TIPO_CUBRIMIENTO");
 
-                entity.Property(e => e.PoliTipoRiesgo).HasColumnName("POLI_TIPO_RIESGO");
+                entity.Property(e => e.TipoRiesgo).HasColumnName("POLI_TIPO_RIESGO");
 
-                entity.HasOne(d => d.PoliTipoCubrimientoNavigation)
+                entity.HasOne(d => d.TipoCubrimientoNavigation)
                     .WithMany(p => p.Polizas)
-                    .HasForeignKey(d => d.PoliTipoCubrimiento)
+                    .HasForeignKey(d => d.TipoCubrimiento)
                     .HasConstraintName("POLIZAS_TIPOS_CUBRIMIENTO_FK");
 
-                entity.HasOne(d => d.PoliTipoRiesgoNavigation)
+                entity.HasOne(d => d.TipoRiesgoNavigation)
                     .WithMany(p => p.Polizas)
-                    .HasForeignKey(d => d.PoliTipoRiesgo)
+                    .HasForeignKey(d => d.TipoRiesgo)
                     .HasConstraintName("POLIZAS_TIPOS_RIESGO_FK");
             });
 
-            modelBuilder.Entity<PolizasCliente>(entity =>
+            modelBuilder.Entity<PolizaCliente>(entity =>
             {
-                entity.HasKey(e => new { e.PoclIdCliente, e.PoclIdPoliza })
+                entity.HasKey(e => new { e.IdCliente, e.IdPoliza })
                     .HasName("POLIZAS_CLIENTE_PK");
 
                 entity.ToTable("POLIZAS_CLIENTE");
 
-                entity.Property(e => e.PoclIdCliente).HasColumnName("POCL_ID_CLIENTE");
+                entity.Property(e => e.IdCliente).HasColumnName("POCL_ID_CLIENTE");
 
-                entity.Property(e => e.PoclIdPoliza).HasColumnName("POCL_ID_POLIZA");
+                entity.Property(e => e.IdPoliza).HasColumnName("POCL_ID_POLIZA");
 
-                entity.HasOne(d => d.PoclIdClienteNavigation)
+                entity.HasOne(d => d.IdClienteNavigation)
                     .WithMany(p => p.PolizasCliente)
-                    .HasForeignKey(d => d.PoclIdCliente)
+                    .HasForeignKey(d => d.IdCliente)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("POLIZAS_CLIENTE_CLIENTES_FK");
 
-                entity.HasOne(d => d.PoclIdPolizaNavigation)
+                entity.HasOne(d => d.IdPolizaNavigation)
                     .WithMany(p => p.PolizasCliente)
-                    .HasForeignKey(d => d.PoclIdPoliza)
+                    .HasForeignKey(d => d.IdPoliza)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("POLIZAS_CLIENTE_POLIZAS_FK");
             });
 
-            modelBuilder.Entity<TiposCubrimiento>(entity =>
+            modelBuilder.Entity<TipoCubrimiento>(entity =>
             {
-                entity.HasKey(e => e.TicoId)
+                entity.HasKey(e => e.Id)
                     .HasName("TIPOS_CUBRIMIENTO_PK");
 
                 entity.ToTable("TIPOS_CUBRIMIENTO");
 
-                entity.Property(e => e.TicoId)
-                    .HasColumnName("TICO_ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("TICO_ID");
 
-                entity.Property(e => e.TicoDescripcion)
+                entity.Property(e => e.Descripcion)
                     .HasColumnName("TICO_DESCRIPCION")
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TicoNombre)
+                entity.Property(e => e.Nombre)
                     .HasColumnName("TICO_NOMBRE")
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.TicoPorcentaje).HasColumnName("TICO_PORCENTAJE");
+                entity.Property(e => e.Porcentaje).HasColumnName("TICO_PORCENTAJE");
             });
 
-            modelBuilder.Entity<TiposRiesgo>(entity =>
+            modelBuilder.Entity<TipoRiesgo>(entity =>
             {
-                entity.HasKey(e => e.TiriId)
+                entity.HasKey(e => e.Id)
                     .HasName("TIPOS_RIESGO_PK");
 
                 entity.ToTable("TIPOS_RIESGO");
 
-                entity.Property(e => e.TiriId)
-                    .HasColumnName("TIRI_ID")
-                    .ValueGeneratedNever();
+                entity.Property(e => e.Id).HasColumnName("TIRI_ID");
 
-                entity.Property(e => e.TiriDescripcion)
+                entity.Property(e => e.Descripcion)
                     .HasColumnName("TIRI_DESCRIPCION")
                     .HasMaxLength(100)
                     .IsUnicode(false);
