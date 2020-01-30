@@ -47,6 +47,9 @@ namespace InsuranceApi.Controllers
         {
             try
             {
+                if (!ModelState.IsValid) {
+                    return BadRequest();
+                }
                 _repository.Create(poliza);
             }
             catch (DbUpdateException)
@@ -60,6 +63,9 @@ namespace InsuranceApi.Controllers
                     throw;
                 }
             }
+            catch (Exception e) {
+                return StatusCode(405, e.InnerException);
+            }
 
             return CreatedAtAction("Get", new { id = poliza.Id }, poliza);
         }
@@ -67,6 +73,10 @@ namespace InsuranceApi.Controllers
         [HttpPut("{id}")]
         public ActionResult<Poliza> put([FromQuery] Poliza poliza, int id)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             _repository.Update(poliza);
             return poliza;
         }

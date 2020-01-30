@@ -4,23 +4,71 @@
             <div class="card-header">
                 <div class="row">
                     <h5 class="col-md-3 card-title">
-                        {{currentMode == modesEnum.Creation ? 'Crear Cliente' : 'Editar Cliente'}}
+                        {{currentMode == modesEnum.Creation ? 'Crear Poliza' : 'Editar Poliza'}}
                     </h5>
                 </div>
             </div>
             <div class="card-body">
                 <div class="form-row">
-                    <div class="from-group col-md-12">
-                        <label>*Nombre del cliente</label>
-                        <dx-text-box [inputAttr]="{ style: 'text-transform: uppercase' }" [(ngModel)]="client.nombre">
+                    <div class="from-group col-md-6">
+                        <label>*Nombre de la poliza</label>
+                        <dx-text-box 
+                        [(ngModel)]="policy.nombre">
                         </dx-text-box>
+                    </div>
+                    <div class="from-group col-md-6">
+                        <label>*Descripción</label>
+                        <dx-text-box 
+                        [(ngModel)]="policy.descripcion">
+                        </dx-text-box>
+                    </div>
+                    <div class="from-group col-md-4">
+                        <label>*Fecha inicio vigencia</label>
+                        <dx-date-box  [(ngModel)]="policy.inicioVigencia"
+                                        [useMaskBehavior]="true" displayFormat="yyyy-MM-dd"
+                                dateSerializationFormat="yyyy-MM-dd">
+                                    </dx-date-box>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>*Meses de cobertura</label>
+                        <dx-number-box value=1 [min]="1" [(ngModel)]="policy.mesesCobertura">
+                        </dx-number-box>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>*Precio</label>
+                        <dx-number-box [min]="0" [(ngModel)]="policy.precio" format="currency">
+                        </dx-number-box>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label>*Tipo de riesgo</label>
+                        <dx-select-box class="col-sm-12"
+                        *ngIf="riskLoaded"
+                         [(ngModel)]="policy.tipoRiesgo"
+                            [items]="riskItems" displayExpr="descripcion" valueExpr="id"
+                            placeholder=""
+                            [searchEnabled]="true"
+                            (onValueChanged)="changeCoverDataSource()">
+                        </dx-select-box>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label>*Tipo de cubrimiento</label>
+                        <dx-select-box 
+                            *ngIf="coverLoaded"
+                            class="col-sm-12" [(ngModel)]="policy.tipoCubrimiento"
+                            [items]="filteredCoverItems" displayExpr="nombre" valueExpr="id"
+                            placeholder="">
+                        </dx-select-box>
+                    </div>
+                    <div class="col-md-1">
+                        <label>Porcentaje</label>
+                        <span>{{getPercentage()}}</span>
                     </div>
                 </div>
             </div>
             <div class="card-footer">
                 <div class="float-right">
                     <dx-button stylingMode="outlined" text="Guardar" type="success" [width]="150" icon="save"
-                        (onClick)="saveClient();">
+                        (onClick)="save();">
                     </dx-button>
                 </div>
             </div>

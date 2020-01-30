@@ -25,6 +25,7 @@
                     [dataSource]="policiesDataSource"
                     [showBorders]="true"
                     [columnAutoWidth]="true"
+                    (onCellClick)="deleteEvent($event)"
                     (onRowDblClick)="editClient($event)"
                     >
                     <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
@@ -57,7 +58,7 @@
                     <dxi-column
                         caption="Precio"
                         dataField = "precio"
-                        [editorOptions]="{ format: 'currency'}"
+                        format = 'currency'
                     ></dxi-column>
                     <dxi-column
                         caption="Tipo cubrimiento"
@@ -70,8 +71,18 @@
                     <dxi-column
                         caption="Tipo riesgo"
                         dataField = "tipoRiesgoNavigation.descripcion"
-                        [editorOptions]="{ format: 'currency'}"
-                    ></dxi-column>                    
+                        format = 'currency'
+                    ></dxi-column>
+                    <dxi-column dataField="filed1" caption="Eliminar"
+                    alignment="center" 
+                    cellTemplate="cellTemplate"
+                    >  
+                        <div *dxTemplate="let data of 'cellTemplate'">  
+                          <div style="cursor: pointer;">  
+                              <i class="fa fa-trash" aria-hidden="true"></i>  
+                          </div>
+                        </div>  
+                      </dxi-column>                    
                 </dx-data-grid>
             </div>
         </div>

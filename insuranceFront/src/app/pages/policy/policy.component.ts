@@ -22,10 +22,10 @@ export class PolicyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getClients();
+    this.getPolicies();
   }
 
-  getClients() {
+  getPolicies() {
     this.policyService.getAll().then(res => {
       this.policiesDataSource = res.body;
       console.log(this.policiesDataSource)
@@ -41,4 +41,14 @@ export class PolicyComponent implements OnInit {
   editClient(e) {
     this.router.navigate(["polizas", e.data.id])
   }
+
+  deleteEvent(e) {
+    if (e.rowType == "data" && e.column.caption == "Eliminar") {
+      this.policyService.remove(e.data.id).then(res => 
+        {
+          this.toastr.success("Se eliminó la poliza correctamente");
+          this.getPolicies();
+        })
+    }
+  } 
 }

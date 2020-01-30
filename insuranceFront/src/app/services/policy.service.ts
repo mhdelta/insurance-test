@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { ToastrService } from 'ngx-toastr';
+import { Policy } from 'app/models/policy.model';
 
 @Injectable()
 export class PolicyService {
@@ -27,7 +28,7 @@ export class PolicyService {
       if (id == 0) {
         throw new Error("No se envió el id")
       }
-      return this.http.get(environment.baseApiUrl + "polizas/" + id, {
+      return this.http.get<Policy>(environment.baseApiUrl + "polizas/" + id, {
         observe: "response"
       }).toPromise();
     } catch (error) {
@@ -37,32 +38,45 @@ export class PolicyService {
   }
 
 
-  public Add(client: any) {
+  public Add(policy: any) {
     try {
-      return this.http.post(environment.baseApiUrl + "clientes", JSON.stringify(client), {
+      return this.http.post(environment.baseApiUrl + "polizas", JSON.stringify(policy), {
         headers: { "Content-Type": "application/json" }
       }).toPromise();
     } catch (error) {
-      this.toastr.error('Ocurrió un error al agregar un cliente');
+      this.toastr.error('Ocurrió un error al agregar una poliza');
       console.log(error);
     }
   }
 
-  public Modify(client: any) {
+  public Modify(poliza: any) {
     try {
-      let id = client.id.toString();
       let params = new HttpParams();
-      Object.keys(client).forEach(p => {
-        if (client[p] != null) {
-          params = params.append(p.toString(), client[p].toString());
+      Object.keys(poliza).forEach(p => {
+        if (poliza[p] != null) {
+          params = params.append(p.toString(), poliza[p].toString());
         }
       });
-      return this.http.put(environment.baseApiUrl + "clientes/" + client.id, {}, {
+      return this.http.put(environment.baseApiUrl + "polizas/" + poliza.id, {}, {
         headers: { "Content-Type": "application/json" },
         params: params
       }).toPromise();
     } catch (error) {
-      this.toastr.error('Ocurrió un error al obtener los registros de pbc');
+      this.toastr.error('Ocurrió un error al modificar la poliza');
+      console.log(error);
+    }
+  }
+
+  public remove(id = 0) {
+    try {
+      if (id == 0) {
+        throw new Error("No se envió el id")
+      }
+      return this.http.delete(environment.baseApiUrl + "polizas/" + id, {
+        observe: "response"
+      }).toPromise();
+    } catch (error) {
+      this.toastr.error('Ocurrió un error al eliminar la poliza');
       console.log(error);
     }
   }
