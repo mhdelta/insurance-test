@@ -1,0 +1,22 @@
+<div class="wrapper">
+    <div class="sidebar" data-color="white" data-active-color="info">
+        <sidebar-cmp></sidebar-cmp>
+    </div>
+    <div class="main-panel">
+        <navbar-cmp></navbar-cmp>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+        <footer-cmp></footer-cmp>
+    </div>
+</div>
+<!-- small gear at right -->
+<!-- <fixedplugin-cmp></fixedplugin-cmp> -->
+<ngx-spinner
+  bdColor="rgba(51,51,51,0.6)"
+  size="large"
+  color="#e20613"
+  type="ball-scale-multiple"
+>
+<p style="font-size: 20px; color: white">... Cargando ...</p>
+</ngx-spinner>

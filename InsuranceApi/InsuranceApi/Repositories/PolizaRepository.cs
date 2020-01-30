@@ -13,5 +13,11 @@ namespace InsuranceApi.Repositories
         {
 
         }
+        public IQueryable<Poliza> FindAll()
+        {
+            return this.RepositoryContext.Set<Poliza>().AsNoTracking()
+                .Include(x => x.TipoCubrimientoNavigation)
+                .Include(x => x.TipoRiesgoNavigation);
+        }
     }
 }

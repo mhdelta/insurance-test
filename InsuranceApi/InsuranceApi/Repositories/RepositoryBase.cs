@@ -34,7 +34,7 @@ namespace InsuranceApi.Repositories
 
         public void Update(T entity)
         {
-            this.RepositoryContext.Set<T>().Update(entity);
+            this.RepositoryContext.Entry(entity).State = EntityState.Modified;
             this.RepositoryContext.SaveChanges();
         }
 

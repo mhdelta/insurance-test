@@ -67,6 +67,13 @@ namespace InsuranceApi.Controllers
             return CreatedAtAction("GetClientes", new { id = cliente.Id }, cliente);
         }
 
+        [HttpPut("{id}")]
+        public ActionResult<Cliente> put([FromQuery] Cliente cliente, int id)
+        {
+            _repository.Update(cliente);
+            return cliente;
+        }
+
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cliente>> DeleteClientes(int id)
