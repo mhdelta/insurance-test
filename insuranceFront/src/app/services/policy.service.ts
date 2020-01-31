@@ -15,7 +15,9 @@ export class PolicyService {
   public getAll() {
     try {
       return this.http.get(environment.baseApiUrl + "polizas", {
-        observe: "response"
+        observe: "response",
+        headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener los registros de polizas');
@@ -29,7 +31,9 @@ export class PolicyService {
         throw new Error("No se envió el id")
       }
       return this.http.get<Policy>(environment.baseApiUrl + "polizas/" + id, {
-        observe: "response"
+        observe: "response",
+        headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener la poliza');
@@ -41,7 +45,10 @@ export class PolicyService {
   public Add(policy: any) {
     try {
       return this.http.post(environment.baseApiUrl + "polizas", JSON.stringify(policy), {
-        headers: { "Content-Type": "application/json" }
+        headers: { 
+          "Content-Type": "application/json", 
+          "Access-Control-Allow-Credentials": "true",
+          "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al agregar una poliza');
@@ -58,7 +65,8 @@ export class PolicyService {
         }
       });
       return this.http.put(environment.baseApiUrl + "polizas/" + poliza.id, {}, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json",  'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")},
         params: params
       }).toPromise();
     } catch (error) {
@@ -73,7 +81,9 @@ export class PolicyService {
         throw new Error("No se envió el id")
       }
       return this.http.delete(environment.baseApiUrl + "polizas/" + id, {
-        observe: "response"
+        observe: "response",
+        headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al eliminar la poliza');

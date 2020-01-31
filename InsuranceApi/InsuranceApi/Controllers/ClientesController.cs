@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InsuranceApi.Models;
 using InsuranceApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InsuranceApi.Controllers
 {
@@ -23,6 +24,7 @@ namespace InsuranceApi.Controllers
 
         // GET: api/Clientes
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetClientes()
         {
             return await _repository.FindAll().ToListAsync();
@@ -30,6 +32,7 @@ namespace InsuranceApi.Controllers
 
         [HttpGet]
         [Route("asignados")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Cliente>>> GetAssigned()
         {
             return await _repository
@@ -46,6 +49,7 @@ namespace InsuranceApi.Controllers
 
         // GET: api/Clientes/5
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<Cliente>> GetClientes(int id)
         {
             var clientes = _repository.Find(id);
@@ -62,6 +66,7 @@ namespace InsuranceApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Cliente>> PostClientes(Cliente cliente)
         {
             try
@@ -84,6 +89,7 @@ namespace InsuranceApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public ActionResult<Cliente> put([FromQuery] Cliente cliente, int id)
         {
             _repository.Update(cliente);
@@ -92,6 +98,7 @@ namespace InsuranceApi.Controllers
 
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Cliente>> DeleteClientes(int id)
         {
             var cliente = _repository.Find(id);

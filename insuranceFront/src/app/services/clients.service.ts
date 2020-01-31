@@ -15,7 +15,9 @@ export class ClientsService {
   public GetAll() {
     try {
       return this.http.get(environment.baseApiUrl + "clientes", {
-        observe: "response"
+        observe: "response",
+        headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener los registros de clientes');
@@ -26,7 +28,11 @@ export class ClientsService {
   public GetAssigned() {
     try {
       return this.http.get(environment.baseApiUrl + "clientes/asignados", {
-        observe: "response"
+        observe: "response",
+        headers: {
+          'Access-Control-Allow-Credentials': 'true',
+      "Authorization": "Bearer " + localStorage.getItem("insuranceToken")
+        }
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener los registros de clientes');
@@ -40,6 +46,10 @@ export class ClientsService {
         throw new Error("No se envió el id")
       }
       return this.http.get(environment.baseApiUrl + "clientes/" + id, {
+        headers: {
+          'Access-Control-Allow-Credentials': 'true',
+          "Authorization": "Bearer " + localStorage.getItem("insuranceToken")
+        },
         observe: "response"
       }).toPromise();
     } catch (error) {
@@ -52,7 +62,8 @@ export class ClientsService {
   public Add(client: any) {
     try {
       return this.http.post(environment.baseApiUrl + "clientes", JSON.stringify(client), {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json", 'Access-Control-Allow-Credentials': 'true',
+      "Authorization": "Bearer " + localStorage.getItem("insuranceToken") }
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al agregar un cliente');
@@ -63,7 +74,8 @@ export class ClientsService {
   public Assign(newAssign: {idCliente: number, idPoliza: number}) {
     try {
       return this.http.post(environment.baseApiUrl + "polizasclientes", JSON.stringify(newAssign), {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json", 'Access-Control-Allow-Credentials': 'true',
+      "Authorization": "Bearer " + localStorage.getItem("insuranceToken") }
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al asignar la poliza');
@@ -81,7 +93,8 @@ export class ClientsService {
         }
       });
       return this.http.put(environment.baseApiUrl + "clientes/" + client.id, {}, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Access-Control-Allow-Credentials': 'true',
+      "Authorization": "Bearer " + localStorage.getItem("insuranceToken") },
         params: params
       }).toPromise();
     } catch (error) {
@@ -96,6 +109,10 @@ export class ClientsService {
         throw new Error("No se envió el id")
       }
       return this.http.delete(environment.baseApiUrl + "polizasclientes", {
+        headers: {
+          'Access-Control-Allow-Credentials': 'true',
+          "Authorization": "Bearer " + localStorage.getItem("insuranceToken")
+        },
         params: new HttpParams()
         .append("idCliente", idCliente.toString())
         .append("idPoliza", idPoliza.toString())

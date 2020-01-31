@@ -14,7 +14,9 @@ export class RiskTypeService {
   public getAll() {
     try {
       return this.http.get(environment.baseApiUrl + "tiposriesgos", {
-        observe: "response"
+        observe: "response",
+        headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener los registros de tipos riesgos');
@@ -28,7 +30,8 @@ export class RiskTypeService {
         throw new Error("No se envió el id")
       }
       return this.http.get(environment.baseApiUrl + "tiposriesgos/" + id, {
-        observe: "response"
+        observe: "response", headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener el tipo de riesgo');
@@ -40,7 +43,8 @@ export class RiskTypeService {
   public Add(tipoRiesgo: any) {
     try {
       return this.http.post(environment.baseApiUrl + "tiposriesgos", JSON.stringify(tipoRiesgo), {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" , 'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al agregar un tiposriesgos');
@@ -58,7 +62,8 @@ export class RiskTypeService {
         }
       });
       return this.http.put(environment.baseApiUrl + "tiposriesgos/" + tipoRiesgo.id, {}, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken") },
         params: params
       }).toPromise();
     } catch (error) {

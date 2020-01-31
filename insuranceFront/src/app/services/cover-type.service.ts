@@ -14,7 +14,9 @@ export class CoverTypeService {
   public getAll() {
     try {
       return this.http.get(environment.baseApiUrl + "tiposCubrimientos", {
-        observe: "response"
+        observe: "response",
+        headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener los registros de tiposCubrimientos');
@@ -28,7 +30,9 @@ export class CoverTypeService {
         throw new Error("No se envió el id")
       }
       return this.http.get(environment.baseApiUrl + "tiposCubrimientos/" + id, {
-        observe: "response"
+        observe: "response",
+        headers: {'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")}
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener el tipo de cubrimiento');
@@ -40,7 +44,8 @@ export class CoverTypeService {
   public Add(tipoCubrimiento: any) {
     try {
       return this.http.post(environment.baseApiUrl + "tiposCubrimientos", JSON.stringify(tipoCubrimiento), {
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json", 'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken") }
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al agregar un tipo cubrimiento');
@@ -58,7 +63,8 @@ export class CoverTypeService {
         }
       });
       return this.http.put(environment.baseApiUrl + "tiposcubrimientos/" + tipoCubrimiento.id, {}, {
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'Access-Control-Allow-Credentials': 'true',
+        "Authorization": "Bearer " + localStorage.getItem("insuranceToken")},
         params: params
       }).toPromise();
     } catch (error) {

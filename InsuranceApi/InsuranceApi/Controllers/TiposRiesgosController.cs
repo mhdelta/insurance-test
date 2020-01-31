@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using InsuranceApi.Models;
 using InsuranceApi.Repositories;
+using Microsoft.AspNetCore.Authorization;
 
 namespace InsuranceApi.Controllers
 {
@@ -28,6 +29,7 @@ namespace InsuranceApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<TipoRiesgo>> GetById(int id)
         {
             var tipoRiesgo = _repository.Find(id);
@@ -43,6 +45,7 @@ namespace InsuranceApi.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<TipoRiesgo>> post(TipoRiesgo tipoRiesgo)
         {
             try
@@ -65,6 +68,7 @@ namespace InsuranceApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<TipoRiesgo>> Delete(int id)
         {
             var tipoRiesgo = _repository.Find(id);

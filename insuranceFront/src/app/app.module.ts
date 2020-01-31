@@ -15,6 +15,9 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
 import { HttpClientModule } from '@angular/common/http';
 import { NgxSpinnerModule } from "ngx-spinner";
 
+import { CanActivateViaAuthGuard } from './guards/canactivate.guard';
+import { AuthService } from './services/auth.service';
+
 
 @NgModule({
   declarations: [
@@ -37,7 +40,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     }),
     NgxSpinnerModule
   ],
-  providers: [],
+  providers: [CanActivateViaAuthGuard, AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
