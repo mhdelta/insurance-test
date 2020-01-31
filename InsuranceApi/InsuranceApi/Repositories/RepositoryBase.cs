@@ -43,5 +43,10 @@ namespace InsuranceApi.Repositories
             this.RepositoryContext.Set<T>().Remove(entity);
             this.RepositoryContext.SaveChanges();
         }
+
+        public T Find(int idCliente, int idPoliza)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

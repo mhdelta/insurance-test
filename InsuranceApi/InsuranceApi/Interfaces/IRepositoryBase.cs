@@ -9,6 +9,7 @@ namespace InsuranceApi.Repositories
     {
         IQueryable<T> FindAll();
         T Find(int id);
+        T Find(int idCliente, int idPoliza);
         void Create(T entity);
         void Update(T entity);
         void Delete(T entity);

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from "ngx-spinner";
-import { BasicTableModel } from 'app/models/basic-table.model';
 import { Router } from '@angular/router';
 import { PolicyService } from 'app/services/policy.service';
 

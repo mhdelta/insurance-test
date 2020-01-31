@@ -28,6 +28,22 @@ namespace InsuranceApi.Controllers
             return await _repository.FindAll().ToListAsync();
         }
 
+        [HttpGet]
+        [Route("asignados")]
+        public async Task<ActionResult<IEnumerable<Cliente>>> GetAssigned()
+        {
+            return await _repository
+                .FindAll()
+                .Where(x => x.PolizasCliente.Count > 0)
+                .Include(x => x.PolizasCliente)
+                .ThenInclude(x => x.IdPolizaNavigation)
+                .ThenInclude(x => x.TipoCubrimientoNavigation)
+                .Include(x => x.PolizasCliente)
+                .ThenInclude(x => x.IdPolizaNavigation)
+                .ThenInclude(x => x.TipoRiesgoNavigation)
+                .ToListAsync();
+        }
+
         // GET: api/Clientes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cliente>> GetClientes(int id)

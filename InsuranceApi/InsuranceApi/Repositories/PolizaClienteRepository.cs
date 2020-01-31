@@ -13,5 +13,11 @@ namespace InsuranceApi.Repositories
         {
 
         }
+
+        public PolizaCliente Find(int idCliente, int idPoliza)
+        {
+            return RepositoryContext.Set<PolizaCliente>()
+                .Where(x => x.IdCliente == idCliente && x.IdPoliza == idPoliza).FirstOrDefault();
+        }
     }
 }

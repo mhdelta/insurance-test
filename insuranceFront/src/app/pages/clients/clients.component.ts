@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { NgxSpinnerService } from "ngx-spinner";
-import { BasicTableModel } from 'app/models/basic-table.model';
 import { ClientsService } from 'app/services/clients.service';
 import { Router } from '@angular/router';
 
@@ -26,7 +25,7 @@ export class ClientsComponent implements OnInit {
   }
 
   getClients() {
-    this.clientService.getAll().then(res => {
+    this.clientService.GetAll().then(res => {
       this.clientsDataSource = res.body;
     }, err => {
       console.error(err)

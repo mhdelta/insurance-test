@@ -8,5 +8,6 @@ namespace InsuranceApi.Repositories
 {
     public interface IClienteRepository: IRepositoryBase<Cliente>
     {
+
     }
 }

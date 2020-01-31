@@ -1,0 +1,150 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">
+                    <div class="row">
+                        <div class="col-md-12">
+                            Clientes
+                            <div class="float-right" style="padding-right: 5%;">
+                                <dx-button stylingMode="outlined" text="Asignar poliza" type="warning" [width]="200"
+                                    icon="plus" (onClick)="showPopup = true">
+                                </dx-button>
+                            </div>
+                        </div>
+                    </div>
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="form-group col-md-6">
+                    <label>Cliente</label>
+                    <div class="col-sm-12">
+                        <dx-select-box class="col-sm-12" [(ngModel)]="selectedClient"
+                            [items]="assignedClientsDataSource" displayExpr="nombre" placeholder=""
+                            [searchEnabled]="true">
+                        </dx-select-box>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="selectedClient &&selectedClient.id">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Polizas asignadas</h5>
+            </div>
+            <div class="card-body">
+                <div class="row" >
+                    <div class="col-md-12">
+                        <dx-data-grid 
+                        [dataSource]="selectedClient.polizasCliente"
+                        [showBorders]="true"
+                        [columnAutoWidth]="true"
+                        (onCellClick)="deleteEvent($event)"
+                        (onRowDblClick)="editClient($event)"
+                        >
+                        <dxo-paging [enabled]="true" [pageSize]="15"></dxo-paging>
+                        <dxo-pager
+                            [showInfo]="true">
+                        </dxo-pager>
+                        <dxo-sorting mode="none"></dxo-sorting>
+                        <dxo-editing [allowUpdating]="false"></dxo-editing>
+                        
+                        <dxi-column
+                            caption="Nombre poliza"
+                            dataField = "idPolizaNavigation.nombre"
+                            dataType="string"
+                        ></dxi-column>
+                        <dxi-column
+                            caption="Descripción"
+                            dataField = "idPolizaNavigation.descripcion"
+                            dataType="string"
+                        ></dxi-column>
+                        <dxi-column
+                            caption="Inicio vigencia"
+                            dataField = "idPolizaNavigation.inicioVigencia"
+                            dataType="date"
+                        ></dxi-column>
+                        <dxi-column
+                            caption="Meses cobertura"
+                            dataField = "idPolizaNavigation.mesesCobertura"
+                            dataType="number"
+                        ></dxi-column>
+                        <dxi-column
+                            caption="Precio"
+                            dataField = "idPolizaNavigation.precio"
+                            format = 'currency'
+                        ></dxi-column>
+                        <dxi-column
+                            caption="Tipo cubrimiento"
+                            dataField = "idPolizaNavigation.tipoCubrimientoNavigation.nombre"
+                        ></dxi-column>
+                        <dxi-column
+                            caption="Porcentaje"
+                            dataField = "idPolizaNavigation.tipoCubrimientoNavigation.porcentaje"
+                        ></dxi-column>
+                        <dxi-column
+                            caption="Tipo riesgo"
+                            dataField = "idPolizaNavigation.tipoRiesgoNavigation.descripcion"
+                            format = 'currency'
+                        ></dxi-column>
+                        <dxi-column dataField="idPolizaNavigation.led1" caption="Eliminar"
+                        alignment="center" 
+                        cellTemplate="cellTemplate"
+                        >  
+                            <div *dxTemplate="let data of 'cellTemplate'">  
+                              <div style="cursor: pointer;">  
+                                  <i class="fa fa-trash" aria-hidden="true"></i>  
+                              </div>
+                            </div>  
+                          </dxi-column>                    
+                    </dx-data-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<dx-popup #popup [showTitle]="true" title="Búsqueda de contratos" [dragEnabled]="false" [closeOnOutsideClick]="true"
+    [(visible)]="showPopup">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div *dxTemplate="let data of 'content'">
+                <dx-scroll-view height="100%" width="100%">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label>Cliente</label>
+                            <div class="col-sm-12">
+                                <dx-select-box class="col-sm-12" [(ngModel)]="newPolicyAssignation.idCliente"
+                                    [items]="clientsDataSource" displayExpr="nombre" valueExpr="id" placeholder=""
+                                    [searchEnabled]="true">
+                                </dx-select-box>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>Poliza</label>
+                            <div class="col-sm-12">
+                                <dx-select-box class="col-sm-12" [(ngModel)]="newPolicyAssignation.idPoliza"
+                                    [items]="policiesDataSource" displayExpr="nombre" valueExpr="id" placeholder=""
+                                    [searchEnabled]="true">
+                                </dx-select-box>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row float-right">
+                        <div class="col-sm-10">
+                            <dx-button icon="plus" text="Asignar" [width]="150" (onClick)="assignPolicy()">
+                            </dx-button>
+                        </div>
+                        <div class="col-sm-2"></div>
+                    </div>
+                </dx-scroll-view>
+            </div>
+        </div>
+    </div>
+</dx-popup>

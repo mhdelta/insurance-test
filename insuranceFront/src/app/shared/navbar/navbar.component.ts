@@ -35,18 +35,8 @@ export class NavbarComponent implements OnInit{
     }
     getTitle(){
       var title = this.location.prepareExternalUrl(this.location.path());
-      const regex = /pbc\//;
       if(title.charAt(0) === '#'){
           title = title.slice( 1 );
-      }
-      if(title.match(regex) != null) {
-        return "Edición PBC"
-      }
-      if (title == "/crear-pbc") {
-        return "Crear PBC"
-      }
-      if (title == "/crear-vereda") {
-        return "Crear Vereda"
       }
       for(var item = 0; item < this.listTitles.length; item++){
           if(this.listTitles[item].path === title){

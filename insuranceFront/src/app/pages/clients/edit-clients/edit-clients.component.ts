@@ -32,7 +32,7 @@ export class EditClientsComponent implements OnInit {
 
   ngOnInit() {
     if (this.id) {
-      this.clientService.getById(+this.id).then(res => {
+      this.clientService.GetById(+this.id).then(res => {
         this.client = res.body;
       }, err => console.error(err))
     }

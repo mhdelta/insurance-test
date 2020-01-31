@@ -5,13 +5,14 @@ import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class ClientsService {
+  
 
   constructor(
     private http: HttpClient,
     private toastr: ToastrService
   ) { }
 
-  public getAll() {
+  public GetAll() {
     try {
       return this.http.get(environment.baseApiUrl + "clientes", {
         observe: "response"
@@ -22,7 +23,18 @@ export class ClientsService {
     }
   }
 
-  public getById(id = 0) {
+  public GetAssigned() {
+    try {
+      return this.http.get(environment.baseApiUrl + "clientes/asignados", {
+        observe: "response"
+      }).toPromise();
+    } catch (error) {
+      this.toastr.error('Ocurrió un error al obtener los registros de clientes');
+      console.log(error);
+    }
+  }
+
+  public GetById(id = 0) {
     try {
       if (id == 0) {
         throw new Error("No se envió el id")
@@ -48,6 +60,17 @@ export class ClientsService {
     }
   }
 
+  public Assign(newAssign: {idCliente: number, idPoliza: number}) {
+    try {
+      return this.http.post(environment.baseApiUrl + "polizasclientes", JSON.stringify(newAssign), {
+        headers: { "Content-Type": "application/json" }
+      }).toPromise();
+    } catch (error) {
+      this.toastr.error('Ocurrió un error al asignar la poliza');
+      console.log(error);
+    }
+  }
+
   public Modify(client: any) {
     try {
       let id = client.id.toString();
@@ -63,6 +86,22 @@ export class ClientsService {
       }).toPromise();
     } catch (error) {
       this.toastr.error('Ocurrió un error al obtener los registros de pbc');
+      console.log(error);
+    }
+  }
+
+  public RemoveAssignation(idCliente: number, idPoliza: number) {
+    try {
+      if (idCliente == 0 || idPoliza == 0) {
+        throw new Error("No se envió el id")
+      }
+      return this.http.delete(environment.baseApiUrl + "polizasclientes", {
+        params: new HttpParams()
+        .append("idCliente", idCliente.toString())
+        .append("idPoliza", idPoliza.toString())
+      }).toPromise();
+    } catch (error) {
+      this.toastr.error('Ocurrió un error al eliminar la asignación');
       console.log(error);
     }
   }

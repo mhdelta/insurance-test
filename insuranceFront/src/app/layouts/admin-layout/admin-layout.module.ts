@@ -19,12 +19,15 @@ import {DxButtonModule,
   DxBulletModule,
   DxAccordionModule,
   DxTemplateModule,
-  DxCheckBoxModule} from 'devextreme-angular';
+  DxCheckBoxModule,
+  DxTreeListModule,
+  DxTreeViewModule} from 'devextreme-angular';
 import  DataSource  from 'devextreme/data/data_source';
 import { EditClientsComponent } from 'app/pages/clients/edit-clients/edit-clients.component';
 import { ClientsComponent } from 'app/pages/clients/clients.component';
 import { PolicyComponent } from 'app/pages/policy/policy.component';
 import { EditPolicyComponent } from 'app/pages/policy/edit-policy/edit-policy.component';
+import { ClientsPoliciesComponent } from 'app/pages/clients/clients-policies/clients-policies.component';
 
 @NgModule({
   imports: [
@@ -47,13 +50,15 @@ import { EditPolicyComponent } from 'app/pages/policy/edit-policy/edit-policy.co
     DxBulletModule,
     DxTemplateModule,
     DxAccordionModule,
-    DxCheckBoxModule
+    DxCheckBoxModule,
+    DxTreeViewModule
   ],
   declarations: [
     ClientsComponent,
     EditClientsComponent,
     PolicyComponent,
-    EditPolicyComponent
+    EditPolicyComponent,
+    ClientsPoliciesComponent
   ]
 })
 

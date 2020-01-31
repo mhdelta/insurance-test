@@ -29,35 +29,37 @@ namespace InsuranceApi.Controllers
         {
             try
             {
-                _repository.Create(polizaCliente);
+                var poli = _repository.Find(polizaCliente.IdCliente, polizaCliente.IdPoliza);
+                if (poli == null)
+                {
+                    _repository.Create(polizaCliente);
+                }
+                else {
+                    return StatusCode(200, "El cliente ya cuenta con esta poliza");
+                }
+
+                return Ok("{}");
             }
-            catch (DbUpdateException)
+            catch (Exception e)
             {
-                if (dataExists(polizaCliente.IdCliente))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
+                throw e;
             }
 
             return CreatedAtAction("Get", new { id = polizaCliente.IdCliente }, polizaCliente);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<PolizaCliente>> Delete(int id)
+        [HttpDelete]
+        public async Task<ActionResult<PolizaCliente>> Delete(int idCliente, int idPoliza)
         {
-            var polizas = _repository.Find(id);
-            if (polizas == null)
+            var poliza = _repository.Find(idCliente, idPoliza);
+            if (poliza == null)
             {
                 return NotFound();
             }
 
-            _repository.Delete(polizas);
+            _repository.Delete(poliza);
 
-            return polizas;
+            return Ok("{}");
         }
 
         private bool dataExists(int id)

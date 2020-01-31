@@ -11,6 +11,7 @@ export interface RouteInfo {
 export const ROUTES: RouteInfo[] = [
     { path: '/clientes',     title: 'Clientes',         icon:'nc-badge',       class: '' },
     { path: '/polizas',     title: 'Polizas',         icon:'nc-badge',       class: '' },
+    { path: '/asignacion-polizas',     title: 'Asignación de polizas',         icon:'nc-badge',       class: '' },
 ];
 
 @Component({
