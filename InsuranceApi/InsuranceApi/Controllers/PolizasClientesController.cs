@@ -44,8 +44,6 @@ namespace InsuranceApi.Controllers
             {
                 throw e;
             }
-
-            return CreatedAtAction("Get", new { id = polizaCliente.IdCliente }, polizaCliente);
         }
 
         [HttpDelete]
